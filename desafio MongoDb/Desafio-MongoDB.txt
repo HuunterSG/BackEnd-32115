@@ -227,17 +227,16 @@
 	]
 
 
-// Cambiar el STOCK a 0 de todos los documentos que tengan menos de 4000 de precio:
+// Cambiar el STOCK a 0 de todos los documentos que tengan mas de 4000 de precio:
 
-	db.productos.updateMany({price:{$lt:4000}}, {$set:{stock: 0}})
+	db.productos.updateMany({price:{$gt:4000}}, {$set:{stock: 0}})
 	{
-	  acknowledged: true,
-	  insertedId: null,
-	  matchedCount: 7,
-	  modifiedCount: 0,
-	  upsertedCount: 0
+  	acknowledged: true,
+  	insertedId: null,
+  	matchedCount: 3,
+  	modifiedCount: 3,
+	upsertedCount: 0
 	}
-
 // Borrar todos los productos con precio menor a 1000
 
 	db.productos.deleteMany({price:{$lt:1000}})
