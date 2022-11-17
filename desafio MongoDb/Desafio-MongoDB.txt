@@ -1,0 +1,244 @@
+//Insertando productos:
+//Se insertan 3 para probar que todo funcione:
+
+	db.productos.insertMany([{name: "Coca Cola", price:250}, {name: "Fernet Branca", price: 1750}, {name: "Absolute", price:4000}])
+
+//Se insertan 7 mas para completar los 10:
+
+	 db.productos.insertMany([{name: "Jack Daniels", price: 5000}, {name: "Smirnoff", price: 2500}, {name: "Cerveza Andes", price: 1550}, {name: "gin", price: 4250}, {name: "Trumpeter", price: 4500}, {name: "Sprite", price: 250}, {name: "Aquarius", price: 400}])
+
+//Listamos documentos:
+	ecommerce> db.productos.find().sort({price:-1})
+	[
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589ee"),
+	    name: 'Jack Daniels',
+	    price: 5000
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f2"),
+	    name: 'Trumpeter',
+	    price: 4500
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f1"),
+	    name: 'gin',
+	    price: 4250
+	  },
+	  {
+	    _id: ObjectId("637566524656d9a80d8589ed"),
+	    name: 'Absolute',
+	    price: 4000
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589ef"),
+	    name: 'Smirnoff',
+	    price: 2500
+	  },
+	  {
+	    _id: ObjectId("637566524656d9a80d8589ec"),
+	    name: 'Fernet Branca',
+	    price: 1750
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f0"),
+	    name: 'Cerveza Andes',
+	    price: 1550
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f4"),
+	    name: 'Aquarius',
+	    price: 400
+	  },
+	  {
+	    _id: ObjectId("637566524656d9a80d8589eb"),
+	    name: 'Coca Cola',
+	    price: 250
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f3"),
+	    name: 'Sprite',
+	    price: 250
+	  }
+	]
+
+//Catidad de Documentos:
+
+ 	db.productos.countDocuments()
+	10},
+
+//Agregamos un Documento mas a productos:
+
+	db.productos.insertOne({name: "Fanta Uva", price: 600})
+	{
+	  acknowledged: true,
+	  insertedId: ObjectId("637574d34656d9a80d8589f5")
+	}
+
+// Buscar productos de precio menor a 1000:
+
+	db.productos.find({price:{$lt:1000}})
+	[
+	  {
+	    _id: ObjectId("637566524656d9a80d8589eb"),
+	    name: 'Coca Cola',
+	    price: 250
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f3"),
+	    name: 'Sprite',
+	    price: 250
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f4"),
+	    name: 'Aquarius',
+	    price: 400
+	  },
+	  {
+	    _id: ObjectId("637574d34656d9a80d8589f5"),
+	    name: 'Fanta Uva',
+	    price: 600
+	  }
+	]
+
+// Buscar productos de precio entre 1000 y 3000:
+
+	db.productos.find({$and:[{price:{$gte:1000}}, {price:{$lte:3000}}]})
+	[
+	  {
+	    _id: ObjectId("637566524656d9a80d8589ec"),
+	    name: 'Fernet Branca',
+	    price: 1750
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589ef"),
+	    name: 'Smirnoff',
+	    price: 2500
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f0"),
+	    name: 'Cerveza Andes',
+	    price: 1550
+	  }
+	]
+
+//Buscar productos con precio mayor a 3000:
+
+	db.productos.find({price:{$gt:3000}})
+	[
+	  {
+	    _id: ObjectId("637566524656d9a80d8589ed"),
+	    name: 'Absolute',
+	    price: 4000
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589ee"),
+	    name: 'Jack Daniels',
+	    price: 5000
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f1"),
+	    name: 'gin',
+	    price: 4250
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f2"),
+	    name: 'Trumpeter',
+	    price: 4500
+	  }
+	]
+
+//Traer el nombre del tercer productos mas barato:
+
+	db.productos.find().sort({price:1}).limit(1).skip(2).forEach(producto => print(`El nombre de este productos es ${producto.name}`))
+	
+	El nombre de este productos es Aquarius
+
+// Actualizar, agregar campo STOCK con valor de 100 a todos los documentos:
+
+	db.productos.aggregate([{ $set:{"stock": 100} }])
+	[
+	  {
+	    _id: ObjectId("637566524656d9a80d8589eb"),
+	    name: 'Coca Cola',
+	    price: 250,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("637566524656d9a80d8589ec"),
+	    name: 'Fernet Branca',
+	    price: 1750,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("637566524656d9a80d8589ed"),
+	    name: 'Absolute',
+	    price: 4000,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589ee"),
+	    name: 'Jack Daniels',
+	    price: 5000,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589ef"),
+	    name: 'Smirnoff',
+	    price: 2500,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f0"),
+	    name: 'Cerveza Andes',
+	    price: 1550,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f1"),
+	    name: 'gin',
+	    price: 4250,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f2"),
+	    name: 'Trumpeter',
+	    price: 4500,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f3"),
+	    name: 'Sprite',
+	    price: 250,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("6375718f4656d9a80d8589f4"),
+	    name: 'Aquarius',
+	    price: 400,
+	    stock: 100
+	  },
+	  {
+	    _id: ObjectId("637574d34656d9a80d8589f5"),
+	    name: 'Fanta Uva',
+	    price: 600,
+	    stock: 100
+	  }
+	]
+
+
+// Cambiar el STOCK a 0 de todos los documentos que tengan menos de 4000 de precio:
+
+	db.productos.updateMany({price:{$lt:4000}}, {$set:{stock: 0}})
+	{
+	  acknowledged: true,
+	  insertedId: null,
+	  matchedCount: 7,
+	  modifiedCount: 0,
+	  upsertedCount: 0
+	}
+
+// Borrar todos los productos con precio menor a 1000
+
+	db.productos.deleteMany({price:{$lt:1000}})
+	{ acknowledged: true, deletedCount: 4 }
